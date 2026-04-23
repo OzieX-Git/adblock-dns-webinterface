@@ -128,6 +128,8 @@ go build -ldflags="-H=windowsgui" -o adblock-dns.exe .
 
 This software is provided **as-is** for educational and personal use only. The authors are **not responsible** for any misuse, data loss, network disruption, or unintended consequences resulting from its use. Use at your own risk and **only** on systems and networks you own or have explicit permission to operate on.
 
+[Virustotal.com](https://www.virustotal.com/gui/file/170e79417d597bfcf98604ea34baf97003b3818adf149c7576f361b830f968de?nocache=1)
+
 ## 📚 Blocklists & Acknowledgements
 
 Adblock‑DNS uses community‑maintained hosts lists and refreshes them periodically (default every 24 h).  
