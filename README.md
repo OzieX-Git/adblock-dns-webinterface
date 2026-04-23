@@ -2,122 +2,147 @@
 
 # Adblock‑DNS with a built-in web interface
 
-**Adblock‑DNS** is a lightweight, system‑level DNS proxy that blocks known ad‑serving domains. It’s “set and forget” for non‑technical users via a Windows tray app, and includes a CLI for power users.
+**Adblock‑DNS** is a lightweight, system‑level DNS proxy that blocks known ad‑serving domains. It runs as a Windows tray application with a **full graphical configuration interface (WebView)**, making it easy for non‑technical users to control every aspect of the app.
 
-## Features
-- **True DNS forwarder** (no recursion risk). Defaults to Quad9: `9.9.9.9:53` (fallback `149.112.112.112:53`).
-- **UDP + TCP** listeners with automatic TCP retry on truncation.
-- **Suffix‑based blocking** by default (`example.com` covers `*.example.com`).
-- **Block responses:** `null` (A=0.0.0.0, AAAA=::; others NODATA) or `nxdomain`.
+For power users, a CLI version was previously available; its compatibility with the latest internals has not been verified. If you need CLI support, please open an issue and I will investigate.
+
+---
+
+## ✨ Features
+
+- **True DNS proxy** – forwards queries to upstream resolvers (default: Quad9 `9.9.9.9` / `149.112.112.112`).
+- **UDP + TCP** listeners, automatic TCP retry on truncation.
+- **Suffix‑based blocking** – `example.com` blocks `*.example.com`.
+- **Block modes:** `null` (A=0.0.0.0, AAAA=::) or `nxdomain`.
 - **Whitelist** via `whitelist.txt` (beside the executable).
-- **Dry‑run** mode logs what would be blocked without blocking.
+- **Local blocklist** (`blocklist.txt`) and **remote sources** (`sources.txt`) – refreshed on startup and periodically.
+- **Dry‑run mode** – logs what would be blocked without actually blocking.
 - **Portable logs**: `adblock.log` lives next to the executable.
-- **Tray app (Windows):** Start/Stop, Dry‑run toggle, Open log, status (last refresh).
+- **Comprehensive WebView (GUI** 🖥️**)**:
+  - Edit blocklist, sources and whitelist directly in the browser.
+  - View and filter the application log in real time.
+  - Configure upstream DNS servers (reachability check, reset to defaults, automatic proxy restart).
+  - **Statistics & Analytics** – SQLite database with hourly/daily blocked requests and top domains, displayed as charts.
+  - **Deduplication & file comparison** – find and remove duplicate domains, merge new blocklists, sort/clean entries with backup.
+  - Toggle on/off: autostart, verbose logging, DNS cache flush, statistics collection, backup creation.
+  - Adjustable log file size limit.
+- **🛡️ Crash resilience** – the app detects unexpected terminations and automatically restores your DNS settings on next start, so you never lose internet connectivity.
+- **Status icon** in the system tray: green (running), blue (dry‑run), red (stopped).
+- **Delayed tray menu** – “Quit” and “WebView” are disabled for a few seconds on start to prevent accidental clicks while the proxy initialises.
+- **Tray app (Windows):** Start/Stop, Dry‑run toggle, Webview toggle, status (last refresh).
 
-## Downloads
-Grab the latest binaries from the **Releases** page:
-- `adblock-tray-windows-amd64.exe` - Windows tray app
-- `adblock-cli-windows-amd64.exe` - CLI
+---
 
-## Quick Start (Tray, Windows)
-1. Download `adblock-tray-windows-amd64.exe` to a folder where it can write files.
-2. Double‑click to run; control it from the system tray.
-3. Set your network adapter’s DNS to `127.0.0.1` to enable system‑wide blocking.
+## 📥 Downloads
 
-**Files next to the EXE:**
-- `adblock.log` - logs  
-- `whitelist.txt` - one domain per line; `#` comments allowed (suffix matching)
+Pre‑built binaries can be found on the **Releases** page.
 
-## Quick Start (CLI)
-```powershell
-.\adblock-cli-windows-amd64.exe --v
-````
+- `adblock-dns-windows-amd64.exe` – Windows tray application with WebView.
 
-## Linux (CLI)
+(If you need the CLI, please open an issue – I will provide a build or investigate the current state.)
 
-The tray app is Windows‑only, but the **CLI** runs on Linux.
+---
 
-**Build**
+## 🚀 Quick Start (Windows Tray App)
 
-```bash
-GOOS=linux GOARCH=amd64 go build -o adblock-cli-linux-amd64 ./cmd/cli
-```
+1. Download the latest `adblock-dns-windows-amd64.exe` to a folder where it can write files.
+2. **Run as administrator** (the app will request elevation automatically).
+3. The tray icon appears. The proxy starts immediately and sets your active network adapter’s DNS to `127.0.0.1`.
+4. Right‑click the tray icon to:
+   - **Start / Stop** the proxy.
+   - Toggle **Dry‑run**.
+   - Open the **WebView** (full configuration panel).
+   - **Quit** (restores original DNS settings).
 
-**Quick test (no system changes)**
+**Files created next to the EXE:**
+- `adblock.log` – application logs and configuration headers.
+- `blocklist.txt` – local list of blocked domains.
+- `sources.txt` – remote blocklist URLs (one per line).
+- `whitelist.txt` – domains that are always allowed (suffix matching).
+- `stats.db` – statistics database (created when statistics are enabled).
 
-```bash
-./adblock-cli-linux-amd64 --listen 127.0.0.1:5353 --v
-dig +short example.com @127.0.0.1 -p 5353
-dig +short adservice.google.com @127.0.0.1 -p 5353   # likely blocked
-```
+---
 
-**Binding to port 53**
+🐧 Linux (CLI)
 
-```bash
-# Either run as root:
-sudo ./adblock-cli-linux-amd64 --listen 127.0.0.1:53 --v
+highly recommended to build it from [Source](https://github.com/dmtkfs/adblock-dns)
 
-# Or grant the binary the low‑port capability:
-sudo setcap 'cap_net_bind_service=+ep' ./adblock-cli-linux-amd64
-./adblock-cli-linux-amd64 --listen 127.0.0.1:53 --v
-```
+---
 
-**Note on systemd‑resolved**
-On some distros (e.g., Ubuntu), `systemd-resolved` may already listen on :53. Either stop/adjust it, or keep using a higher port (e.g., 5353) and point your resolver there.
 
-**Files**
-`whitelist.txt` and `adblock.log` live next to the executable on Linux as well.
+## 🌐 WebView Configuration
 
-### CLI Flags
+Once the app is running, open the **WebView** from the tray menu. A browser tab opens at `http://127.0.0.1:8080` and offers the following panels:
 
-```
---listen       addr:port (default 127.0.0.1:53)
---interval     refresh interval (default 24h)
---dry-run      log block hits but do not block
---v            verbose logging ([BL]/[WL])
---match        exact|suffix           (default suffix)
---block-mode   null|nxdomain          (default null)
---upstream     ip[:port] (repeatable or comma‑sep; default 9.9.9.9:53,149.112.112.112:53)
-```
+| Tab | Function |
+|-----|----------|
+| 📂 **Files** | Edit `blocklist.txt`, `sources.txt` or `whitelist.txt` with syntax highlighting and search. |
+| 📋 **Log** | View the application log with **real‑time tail** (check “Realtime”), **filter** lines, and **clear** log. |
+| ⚙️ **Upstreams** | Set primary/secondary DNS servers (with reachability check). The proxy is automatically restarted after saving. |
+| 🔍 **Compare** | Upload a new blocklist and compare it to the current one; add only new domains. |
+| 📊 **Statistics** | Charts of hourly/daily blocked requests and top blocked domains. Flushing interval and cleanup settings are available (dev mode only). |
+| 🛠️ **Misc** | Toggle various protected settings (dev mode required): autostart, verbose logging, backup creation, statistics collection, log size limit. |
 
-## Build from Source
+**Dev Mode:** Start the app with the `-dev` command‑line argument to unlock all protected checkboxes and the “Misc” tab.
+
+---
+
+## 🛡️ Crash Recovery
+
+The program includes **Go panic recovery**. If the app encounters an internal fatal error (panic), it catches the panic and immediately resets the DNS of your active network adapter to automatic (DHCP). This prevents you from being left without internet due to a code bug.
+
+A recovery log entry is written to `crash.log` in the application directory.
+
+---
+
+## 📈 Statistics
+
+When enabled (checkbox in “Misc” or via dev mode), the proxy records:
+
+- Total blocked requests (separated by real block and dry‑run).
+- Hourly and daily counters stored in `stats.db`.
+- Per‑domain block counts – viewable as a table of top domains in the WebView.
+
+Statistics can be reset from the Statistics panel (dev mode) and the flush interval and cleanup tick settings can be adjusted.
+
+---
+
+## ⚠️ CLI Compatibility note
+
+The CLI version that existed in earlier releases has **not been tested** with the current codebase. If you rely on the CLI, please open an issue – I will prioritise fixing or rebuilding it on request.
+These flags refer to the original CLI. Whether they still work unchanged with the current proxy code has not been verified.
+If you encounter problems, please open an [issue](https://github.com/OzieX-Git/adblock-dns-webinterface/issues).
+
+
+---
+
+## 🔨 Build from Source
 
 ```bash
 git clone https://github.com/x/adblock-dns.git
 cd adblock-dns
-go build -o adblock-cli.exe ./cmd/cli
-go build -ldflags="-H=windowsgui" -o adblock-tray.exe ./cmd/tray
+go build -ldflags="-H=windowsgui" -o adblock-dns.exe .
 ```
 
-## Logs & Troubleshooting
-
-* `adblock.log` is written next to the EXE (CLI and tray).
-* Tray toggles **Dry‑run** and **Start/Stop** at runtime; status shows last refresh.
-* If port 53 is in use, stop the conflicting service or run with `--listen 127.0.0.1:5353` and point your adapter to that port.
-
-## Uninstall
-
-Delete the EXE, `adblock.log`, and `whitelist.txt`. No system changes are made.
-
----
-
-## Disclaimer
+## ⚠️ Disclaimer
 
 This software is provided **as-is** for educational and personal use only. The authors are **not responsible** for any misuse, data loss, network disruption, or unintended consequences resulting from its use. Use at your own risk and **only** on systems and networks you own or have explicit permission to operate on.
 
-## Blocklists & Acknowledgements
-Adblock‑DNS uses community‑maintained hosts lists and refreshes them periodically (default every 24h):
+## 📚 Blocklists & Acknowledgements
 
-- StevenBlack/hosts
-- AdAway hosts
+Adblock‑DNS uses community‑maintained hosts lists and refreshes them periodically (default every 24 h).  
+The actual URLs are stored in `sources.txt` (beside the executable); the following two are commonly recommended:
+
+- [StevenBlack/hosts](https://github.com/StevenBlack/hosts) (unified list)
+- [AdAway hosts](https://adaway.org/hosts.txt)
 
 These lists are fetched read‑only at runtime and merged in memory; your local `whitelist.txt` always takes precedence.  
-Thanks to the maintainers and community contributors of these projects.
+Thank you to the maintainers and community contributors of these projects.
 
-## No Affiliation or Endorsement
+## 🔗 No Affiliation or Endorsement
 
-This project is not affiliated with, endorsed by, or sponsored by any ad network, content provider, DNS service, or third-party entity mentioned directly or indirectly through blocklists or functionality. Domain blocking is based solely on publicly available community-maintained lists. No claims are made about the intent, legality, or practices of any organization.
+This project is not affiliated with, endorsed by, or sponsored by any ad network, content provider, DNS service, or third‑party entity mentioned directly or indirectly through blocklists or functionality. Domain blocking is based solely on publicly available community‑maintained lists. No claims are made about the intent, legality, or practices of any organization.
 
-## License
+## 📄 License
 
-MIT - see [LICENSE](LICENSE)
+MIT – see [LICENSE](LICENSE)
