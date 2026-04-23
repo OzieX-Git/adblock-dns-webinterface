@@ -45,7 +45,7 @@ Pre‑built binaries can be found on the **Releases** page.
 
 ## 🚀 Quick Start (Windows Tray App)
 
-1. Download the latest `adblock-dns-windows-amd64.exe` to a folder where it can write files.
+1. Download the latest `adblock-webinterface-tray-windows-amd64.exe` to a folder where it can write files.
 2. **Run as administrator** (the app will request elevation automatically).
 3. The tray icon appears. The proxy starts immediately and sets your active network adapter’s DNS to `127.0.0.1`.
 4. Right‑click the tray icon to:
