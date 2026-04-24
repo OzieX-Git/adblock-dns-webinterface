@@ -129,15 +129,14 @@ go build -ldflags="-H=windowsgui" -o adblock-dns.exe .
 This software is provided **as-is** for educational and personal use only. The authors are **not responsible** for any misuse, data loss, network disruption, or unintended consequences resulting from its use. Use at your own risk and **only** on systems and networks you own or have explicit permission to operate on.
 
 
-## ⚠️ Why is the program flagged as suspicious on VirusTotal?
-[Virustotal.com](https://www.virustotal.com/gui/file/170e79417d597bfcf98604ea34baf97003b3818adf149c7576f361b830f968de?nocache=1)
-## Detections listed transparently
+<details>
+<summary><strong>⚠️ Why is the program flagged as suspicious on VirusTotal? (<span style="color: red;">4</span>/72 detections – click to expand)</strong></summary>
 
-<span style="color: red;">4</span>/72
-- **`1.Bkav Pro                   ! W64.AIDetectMalware`**
-- **`2.CrowdStrike Falcon         ! Win/malicious_confidence_70% (D)`**
-- **`3.MaxSecure                  ! Trojan.Malware.300983.susgen`**
-- **`4.Symantec                   ! ML.Attribute.HighConfidence`**
+<br>
+
+🔗 **VirusTotal scan result:** [View full report](https://www.virustotal.com/gui/file/170e79417d597bfcf98604ea34baf97003b3818adf149c7576f361b830f968de?nocache=1)
+
+---
 
 ## 🔍 1. Bkav Pro – `W64.AIDetectMalware`
 
@@ -212,7 +211,7 @@ Symantec not only analyses static properties, but also **behavioural attributes*
 3. **Obfuscated browser launch**  
    `openBrowser()` starts the default browser using `rundll32` – a method also employed by malware to send silent HTTP requests.
 
----
+</details>
 
 ## 📚 Blocklists & Acknowledgements
 
