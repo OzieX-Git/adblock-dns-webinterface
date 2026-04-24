@@ -131,12 +131,13 @@ This software is provided **as-is** for educational and personal use only. The a
 
 ## ⚠️ Why is the program flagged as suspicious on VirusTotal?
 [Virustotal.com](https://www.virustotal.com/gui/file/170e79417d597bfcf98604ea34baf97003b3818adf149c7576f361b830f968de?nocache=1)
-Detections listed transparently
+## Detections listed transparently
+
 <span style="color: red;">4</span>/72
-1.Bkav Pro                   ! W64.AIDetectMalware
-2.CrowdStrike Falcon         ! Win/malicious_confidence_70% (D)
-3.MaxSecure                  ! Trojan.Malware.300983.susgen
-4.Symantec                   ! ML.Attribute.HighConfidence
+- **`1.Bkav Pro                   ! W64.AIDetectMalware`**
+- **`2.CrowdStrike Falcon         ! Win/malicious_confidence_70% (D)`**
+- **`3.MaxSecure                  ! Trojan.Malware.300983.susgen`**
+- **`4.Symantec                   ! ML.Attribute.HighConfidence`**
 
 ## 🔍 1. Bkav Pro – `W64.AIDetectMalware`
 
