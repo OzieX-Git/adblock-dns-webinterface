@@ -57,7 +57,7 @@
 ---
 
 ## [1.1.0] - Windows DNS Integration Improvements
-- **Dynamic Interface Detection**: Added automatic detection of the active network interface using PowerShell, replacing hardcoded "Ethernet 5".
+- **Dynamic Interface Detection**: Added automatic detection of the active network interface using PowerShell, replacing hardcoded "Ethernet-Adapter".
 - **Admin Privilege Handling**: Added automatic restart with administrator privileges for Windows to allow changing system DNS settings.
 - **Local Blocklist Support**: Added support for a local `blocklist.txt` and `sources.txt` file in the executable directory.
 - **Robust DNS Restoration**:
