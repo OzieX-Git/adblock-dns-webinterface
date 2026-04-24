@@ -134,7 +134,7 @@ This software is provided **as-is** for educational and personal use only. The a
 
 <br>
 
-🔗 **VirusTotal scan result:** [View full report](https://www.virustotal.com/gui/file/170e79417d597bfcf98604ea34baf97003b3818adf149c7576f361b830f968de?nocache=1)
+🔗 **VirusTotal scan result from 23.04.2026:** [View full report](https://www.virustotal.com/gui/file/170e79417d597bfcf98604ea34baf97003b3818adf149c7576f361b830f968de?nocache=1)
 
 ---
 
