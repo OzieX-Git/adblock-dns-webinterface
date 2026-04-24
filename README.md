@@ -121,7 +121,7 @@ If you encounter problems, please open an [issue](https://github.com/OzieXtreme/
 ```bash
 git clone https://github.com/x/adblock-dns.git
 cd adblock-dns
-go build -ldflags="-H=windowsgui" -o adblock-dns.exe .
+go build -ldflags="-H=windowsgui" -o adblock-tray.exe ./cmd/tray .
 ```
 
 ## ⚠️ Disclaimer
