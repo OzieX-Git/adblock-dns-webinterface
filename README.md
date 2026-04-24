@@ -35,7 +35,7 @@ For power users, a CLI version was previously available; its compatibility with 
 
 ## 📥 Downloads
 
-Pre‑built binaries can be found on the **[Releases](https://github.com/OzieX-Git/adblock-dns-webinterface/releases/tag/v2.0.0)** page.
+Pre‑built binaries can be found on the **[Releases](https://github.com/OzieXtreme/adblock-dns-webinterface/releases/tag/v2.0.0)** page.
 
 - `adblock-webinterface-tray-windows-amd64.exe` – Windows tray application with WebView.
 
@@ -111,7 +111,7 @@ Statistics can be reset from the Statistics panel (dev mode) and the flush inter
 
 The CLI version that existed in earlier releases has **not been tested** with the current codebase. If you rely on the CLI, please open an issue – I will prioritise fixing or rebuilding it on request.
 These flags refer to the original CLI. Whether they still work unchanged with the current proxy code has not been verified.
-If you encounter problems, please open an [issue](https://github.com/OzieX-Git/adblock-dns-webinterface/issues).
+If you encounter problems, please open an [issue](https://github.com/OzieXtreme/adblock-dns-webinterface/issues).
 
 
 ---
